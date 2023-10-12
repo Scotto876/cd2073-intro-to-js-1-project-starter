@@ -45,17 +45,14 @@ const cart = [];
   - if the product is not already in the cart, add it to the cart
 */
 function addProductToCart(productId) {
-  const productToAdd = products.find(
-    (product) => product.productId === productId
-  );
-  if (productToAdd) {
-    const existingCartItem = cart.find((item) => item.productId === productId);
-    if (existingCartItem) {
-      existingCartItem.quantity += 1;
-    } else {
-      cart.push({ ...productToAdd, quantity: 1 });
+  products.forEach((products) => {
+    if (products.productId === productId) {
+      products.quantity += 1;
     }
-  }
+    if (products.productId === productId && cart.includes(products) === false) {
+      cart.push(products);
+    }
+  });
 }
 
 /* Create a function named increaseQuantity that takes in the productId as an argument
@@ -63,10 +60,11 @@ function addProductToCart(productId) {
   - increaseQuantity should then increase the product's quantity
 */
 function increaseQuantity(productId) {
-  const productToIncrease = cart.find((item) => item.productId === productId);
-  if (productToIncrease) {
-    productToIncrease.quantity += 1;
-  }
+  products.forEach((products) => {
+    if (products.productId === productId) {
+      products.quantity += 1;
+    }
+  });
 }
 /* Create a function named decreaseQuantity that takes in the productId as an argument
   - decreaseQuantity should get the correct product based on the productId
@@ -74,14 +72,19 @@ function increaseQuantity(productId) {
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
 function decreaseQuantity(productId) {
-  const productToDecrease = cart.find((item) => item.productId === productId);
+  // Find the product in the cart based on productId
+  const productToDecrease = cart.find(
+    (product) => product.productId === productId
+  );
+
   if (productToDecrease) {
+    // Decrease the quantity of the product
     productToDecrease.quantity -= 1;
-    if (productToDecrease.quantity === 0) {
-      const index = cart.indexOf(productToDecrease);
-      if (index !== -1) {
-        cart.splice(index, 1);
-      }
+
+    // If the quantity is reduced to 0 or less, remove the product from the cart
+    if (productToDecrease.quantity <= 0) {
+      let productIndex = cart.indexOf(productToDecrease);
+      cart.splice(productIndex, 1);
     }
   }
 }
@@ -91,15 +94,20 @@ function decreaseQuantity(productId) {
   - removeProductFromCart should update the product quantity to 0
   - removeProductFromCart should remove the product from the cart
 */
+
 function removeProductFromCart(productId) {
-  const productToRemove = cart.find((item) => item.productId === productId);
-  if (productToRemove) {
-    const index = cart.indexOf(productToRemove);
-    if (index !== -1) {
-      cart.splice(index, 1);
-    }
+  const productToBeRemoved = cart.find(
+    (product) => product.productId === productId
+  );
+  if (productToBeRemoved) {
+    productToBeRemoved.quantity = 0;
+  }
+  if (productToBeRemoved) {
+    let productIndex = cart.indexOf(productToBeRemoved);
+    cart.splice(productIndex, 1);
   }
 }
+
 /* Create a function named cartTotal that has no parameters
   - cartTotal should iterate through the cart to get the total of all products
   - cartTotal should return the sum of the products in the cart
