@@ -60,7 +60,9 @@ function addProductToCart(productId) {
   - increaseQuantity should then increase the product's quantity
 */
 function increaseQuantity(productId) {
+  // find the product by productId
   products.forEach((products) => {
+    //If true increase quantity by 1
     if (products.productId === productId) {
       products.quantity += 1;
     }
@@ -96,12 +98,13 @@ function decreaseQuantity(productId) {
 */
 
 function removeProductFromCart(productId) {
+  // Find the product in the cart based on productId
   const productToBeRemoved = cart.find(
     (product) => product.productId === productId
-  );
+  ); //if true quantity is 0
   if (productToBeRemoved) {
     productToBeRemoved.quantity = 0;
-  }
+  } //removes items from cart
   if (productToBeRemoved) {
     let productIndex = cart.indexOf(productToBeRemoved);
     cart.splice(productIndex, 1);
@@ -113,6 +116,7 @@ function removeProductFromCart(productId) {
   - cartTotal should return the sum of the products in the cart
 */
 function cartTotal() {
+  // totals up cart
   return cart.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 /* Create a function called emptyCart that empties the products from the cart */
@@ -123,10 +127,25 @@ function emptyCart() {
   - pay will return a negative number if there is a remaining balance
   - pay will return a positive number if money should be returned to customer
 */
-function pay(amountReceived) {
-  const totalAmount = cartTotal();
-  return amountReceived - totalAmount;
+
+let totalPaid = 0;
+
+function pay(amount) {
+  // Add the current payment amount to the totalPaid variable
+  totalPaid += amount;
+  // Calculate the difference between the totalPaid and the cartTotal
+  let remaining = totalPaid - cartTotal();
+
+  // Check if the remaining amount is greater than or equal to zero
+  if (remaining >= 0) {
+    // if true,  reset the `totalPaid` to zero  for the next payment
+    totalPaid = 0;
+    emptyCart();
+  }
+  // Return the remaining
+  return remaining;
 }
+
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 
 /* The following is for running unit tests. 
